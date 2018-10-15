@@ -16,6 +16,8 @@ def init_browser():
 def scrape():
     browser = init_browser()
 
+    mars_data_f = {}
+
 # News Title
     url_mars_news = "https://mars.nasa.gov/news/?page=0&per_page=40&order=publish_date+desc%2Ccreated_at+desc&search=&category=19%2C165%2C184%2C204&blank_scope=Latest"
     response = requests.get(url_mars_news)
@@ -25,6 +27,10 @@ def scrape():
     soup.find_all('div')
     news_title = soup.find_all('div', class_="content_title")[0].text.strip()
     news_p = soup.find_all('div', class_="rollover_description_inner")[0].text.strip()
+
+    # mars_data["news_date"] = news_date
+    mars_data_f["news_title"] = news_title
+    mars_data_f["summary"] = news_p
 
 
 # image
@@ -38,7 +44,8 @@ def scrape():
     url_img = urls[1:-1]
 
     featured_image_url = "https://jpl.nasa.gov" + url_img
-    im = Image.open(requests.get(featured_image_url, stream=True).raw)
+    mars_data_f["featured_image_url"] = featured_image_url
+
 
 
 # Weather
@@ -48,6 +55,7 @@ def scrape():
     html = browser.html
     soup = bs(html, 'html.parser')
     mars_weather = soup.find(string=re.compile("Sol"))
+    mars_data_f["mars_weather"] = mars_weather
 
 # Mars Facts
 
@@ -59,6 +67,8 @@ def scrape():
     mars_data.columns = ['Mars','Info']
     mars_table = mars_data.set_index("Mars").to_html(classes='marsdata').replace('\n', ' ')
     mars_table
+
+    mars_data_f["mars_table"] = mars_table
 
 # Mars Hemispheres Photos
 
@@ -78,3 +88,7 @@ def scrape():
         hemi_data = {"title":img_title,"img_url":img_url}
         hemisphere_image_urls.append(hemi_data)
         browser.back()
+
+
+    mars_data_f['mars_hemis'] = hemisphere_image_urls
+    return mars_data_f
