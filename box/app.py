@@ -28,7 +28,7 @@ def scrape():
         mars_data,
         upsert=True
     )
-    return redirect("http://localhost:5000/", code=302)
+    return redirect("http://127.0.0.1:5000/", code=302)
 
 
 if __name__ == "__main__":
