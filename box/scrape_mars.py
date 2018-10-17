@@ -75,7 +75,7 @@ def scrape():
     url_mars_hemi = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
     browser.visit(url_mars_hemi)
 
-    hemisphere_image_urls = []
+    mars_hemis = []
     for i in range (4):
         time.sleep(3)
         images = browser.find_by_tag('h3')
@@ -86,9 +86,9 @@ def scrape():
         img_title = soup.find("h2",class_="title").text
         img_url = 'https://astrogeology.usgs.gov'+ partial
         hemi_data = {"title":img_title,"img_url":img_url}
-        hemisphere_image_urls.append(hemi_data)
+        mars_hemis.append(hemi_data)
         browser.back()
 
 
-    mars_data_f['mars_hemis'] = hemisphere_image_urls
+    mars_data_f['mars_hemis'] = mars_hemis
     return mars_data_f
